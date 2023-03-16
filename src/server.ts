@@ -18,7 +18,6 @@ export class Server {
     private configure() {
         this.configureMiddleware();
         this.configureRoutes();
-        // this.configureDb();
     }
 
     private configureMiddleware() {
@@ -34,15 +33,6 @@ export class Server {
         }
         new AppRouting(this.router);
     }
-
-    // private configureDb() {
-    //     const db_url = process.env.DB_URL;
-    //     mongoose.connect(db_url);
-    //     const conn = mongoose.connection;
-    //     conn.once('open', () => {
-    //         console.log("Database connection established successfully.");
-    //     })
-    // }
 
     public run() {
         const port = process.env.PORT || 4000;
