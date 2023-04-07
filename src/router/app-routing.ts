@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { AppRoute } from "./app-route";
+import { DbController } from "../controllers/DbController";
 
 export class AppRouting {
     constructor(private route:Router) {
@@ -8,7 +9,7 @@ export class AppRouting {
     }
 
     public configure() {
-        // this.addRoute(new DbController());
+        this.addRoute(new DbController());
     }
 
     private addRoute(appRoute:AppRoute) {

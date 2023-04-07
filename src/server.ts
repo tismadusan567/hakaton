@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import * as http from "http";
 import { json, urlencoded } from "body-parser";
 import { AppRouting } from './router/app-routing';
+import mongoose from 'mongoose';
 const path = require("path");
 require('dotenv').config();
 
@@ -18,6 +19,7 @@ export class Server {
     private configure() {
         this.configureMiddleware();
         this.configureRoutes();
+        this.configureDb();
     }
 
     private configureMiddleware() {
@@ -32,6 +34,17 @@ export class Server {
             this.app.use(express.static(path.join(__dirname, '/../client/build')));
         }
         new AppRouting(this.router);
+    }
+
+    private configureDb() {
+        const db_url:string = process.env.DB_URL ?? "bruh";
+        mongoose.connect(db_url);
+        
+        const flag = mongoose.connection;
+
+        flag.once('open', () => {
+            console.log("Database connection established succesfully!");
+        })
     }
 
     public run() {
