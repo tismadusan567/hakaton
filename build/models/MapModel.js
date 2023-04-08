@@ -5,6 +5,8 @@ const mongoose_1 = require("mongoose");
 // string - ts type
 // String - mongoose type
 exports.MapSchema = new mongoose_1.Schema({
+    title: String,
+    description: String,
     width: Number,
     height: Number,
     complicityRating: Number,

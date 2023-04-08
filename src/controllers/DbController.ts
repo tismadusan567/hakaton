@@ -21,9 +21,25 @@ export class DbController implements AppRoute {
       }
     });
 
-    this.router.get('/getMaps', (request: Request, response: Response) => {
+    this.router.get('/getMaps', async (request: Request, response: Response) => {
+      try {
+        const maps = await MapModel.find();
+
+        console.log(typeof maps);
+
+        return response.status(200).json(maps);
+      } catch (e) {
+        return response.status(500).send(e);
+      }
+    });
+
+    this.router.get('/getMap/:title', async (request: Request, response: Response) => {
       try{
+        const map = await MapModel.findOne({title: request.params.title});
+
+        console.log(map);
         
+        return response.status(200).json(map);
       }catch(e){
         return response.status(500).send(e);
       }

@@ -1,7 +1,8 @@
 import { Model, model, Schema, Types } from "mongoose";
-import { type } from "os";
 
 export interface IMap {
+    title: string;
+    description: string;
     width: number;
     height: number;
     complicityRating: number;
@@ -25,6 +26,8 @@ type MapModelType = Model<IMap, {}, MapDocumentProps>;
 // String - mongoose type
 
 export const MapSchema = new Schema<IMap, MapModelType>({
+    title: String,
+    description: String,
     width: Number,
     height: Number,
     complicityRating: Number,
