@@ -15,7 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DbController = void 0;
 const express_1 = require("express");
 const MapModel_1 = require("../models/MapModel");
+<<<<<<< HEAD
 const CodeModel_1 = require("../models/CodeModel");
+=======
+const Game_1 = require("../game/Game");
+>>>>>>> 207450f5d7f7e4692a49f3264e955c60a1cc66c4
 const cors_1 = __importDefault(require("cors"));
 class DbController {
     constructor() {
@@ -37,9 +41,11 @@ class DbController {
                 console.log("usao");
                 const maps = yield MapModel_1.MapModel.find();
                 console.log(typeof maps);
+                (0, Game_1.runGame)(maps[0], "");
                 return response.status(200).json(maps);
             }
             catch (e) {
+                console.log(e);
                 return response.status(500).send(e);
             }
         }));

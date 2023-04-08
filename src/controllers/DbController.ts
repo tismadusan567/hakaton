@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { AppRoute } from "../router/app-route";
 import { MapModel } from '../models/MapModel';
+import { runGame } from "../game/Game";
 import { CodeModel } from "../models/CodeModel";
 import cors from "cors";
 import { request } from "http";
@@ -29,9 +30,12 @@ export class DbController implements AppRoute {
         const maps = await MapModel.find();
 
         console.log(typeof maps);
+        runGame(maps[0], "");
+
 
         return response.status(200).json(maps);
       } catch (e) {
+        console.log(e);
         return response.status(500).send(e);
       }
     });
@@ -49,32 +53,32 @@ export class DbController implements AppRoute {
     });
 
     this.router.post('/addCode', (request: Request, response: Response) => {
-      try{
+      try {
         const newCode = new CodeModel(request.body);
         newCode.save();
 
         return response.sendStatus(200);
-      }catch(e){
+      } catch (e) {
         return response.status(500).send(e);
       }
     })
 
     this.router.get('/getCodes', async (request: Request, response: Response) => {
-      try{
+      try {
         const codes = await CodeModel.find();
 
         return response.status(200).json(codes);
-      }catch(e){
+      } catch (e) {
         return response.status(500).send(e);
       }
     });
 
     this.router.get('/getCode/:title', async (request: Request, response: Response) => {
-      try{
-        const code = await CodeModel.findOne({title: request.params.title});
+      try {
+        const code = await CodeModel.findOne({ title: request.params.title });
 
         return response.status(200).json(code);
-      }catch(e){
+      } catch (e) {
         return response.status(500).send(e);
       }
     })
