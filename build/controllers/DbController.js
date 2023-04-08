@@ -35,7 +35,8 @@ class DbController {
         this.router.get('/getMaps', (request, response) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const maps = yield MapModel_1.MapModel.find();
-                (0, Game_1.runGame)(maps[0], "");
+                const res = (0, Game_1.runGame)(maps[0], "");
+                console.log(res);
                 return response.status(200).json(maps);
             }
             catch (e) {

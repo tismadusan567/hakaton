@@ -2,13 +2,28 @@ import {runInNewContext} from "vm";
 import { IMap, MapModel } from "../models/MapModel";
 import { readFileSync } from "fs";
 
-interface IGameResult {
-    
+export enum CommandType {
+    walkCommand = 0,
+    teleportCommand = 1
 }
 
-export function runGame(map: IMap, code: string): void{
+export interface ICommand {
+    type: CommandType;
+    x: number;
+    y: number;
+}
+
+export interface IGameResult {
+    commandList?: ICommand[];
+    finished?: boolean;
+    error?: string;
+}
+
+//uradi check da li jer error polje u gameresultu undefined, ako nije doslo je do greske
+export function runGame(map: IMap, code: string): IGameResult {
     let fullCode = "";
 
+    //proveri dal treba da se skloni objectId iz mape
     let testMap = {
         title: 'Cool first level',
         description: 'Easy first level for dummies',
@@ -71,8 +86,17 @@ export function runGame(map: IMap, code: string): void{
         console.error(err);
     }
 
-    const res = runInNewContext(fullCode, {map: testMap});
-    console.log(res);
+    let res = undefined
+    let errorMessage = undefined;
+    try {
+        res = runInNewContext(fullCode, {map: testMap});
+    } catch (err) {
+        errorMessage = (err as Error).stack;
+    }
 
-    return res;
+    return {
+        commandList: res?.commandList,
+        finished: res?.finished,
+        error: errorMessage
+    }
 }
