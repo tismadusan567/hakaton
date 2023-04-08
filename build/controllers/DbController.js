@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DbController = void 0;
 const express_1 = require("express");
 const MapModel_1 = require("../models/MapModel");
+const CodeModel_1 = require("../models/CodeModel");
 const cors_1 = __importDefault(require("cors"));
 class DbController {
     constructor() {
@@ -33,6 +34,7 @@ class DbController {
         });
         this.router.get('/getMaps', (request, response) => __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log("usao");
                 const maps = yield MapModel_1.MapModel.find();
                 console.log(typeof maps);
                 return response.status(200).json(maps);
@@ -46,6 +48,34 @@ class DbController {
                 const map = yield MapModel_1.MapModel.findOne({ title: request.params.title });
                 console.log(map);
                 return response.status(200).json(map);
+            }
+            catch (e) {
+                return response.status(500).send(e);
+            }
+        }));
+        this.router.post('/addCode', (request, response) => {
+            try {
+                const newCode = new CodeModel_1.CodeModel(request.body);
+                newCode.save();
+                return response.sendStatus(200);
+            }
+            catch (e) {
+                return response.status(500).send(e);
+            }
+        });
+        this.router.get('/getCodes', (request, response) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const codes = yield CodeModel_1.CodeModel.find();
+                return response.status(200).json(codes);
+            }
+            catch (e) {
+                return response.status(500).send(e);
+            }
+        }));
+        this.router.get('/getCode/:title', (request, response) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const code = yield CodeModel_1.CodeModel.findOne({ title: request.params.title });
+                return response.status(200).json(code);
             }
             catch (e) {
                 return response.status(500).send(e);

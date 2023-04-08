@@ -42,6 +42,7 @@ const body_parser_1 = require("body-parser");
 const app_routing_1 = require("./router/app-routing");
 const mongoose_1 = __importDefault(require("mongoose"));
 const MapModel_1 = require("./models/MapModel");
+const CodeModel_1 = require("./models/CodeModel");
 const path = require("path");
 require('dotenv').config();
 class Server {
@@ -87,6 +88,20 @@ class Server {
             portalCoordinate: 2
         });
         map.save();
+        const code = new CodeModel_1.CodeModel({
+            title: "C - Segmentation fault problem 1",
+            problemDescription: "Identify block of code which causes segmentation fault in C",
+            sourceCode: "#include <stdio.h>#include<stdlib.h> int main(){ printf(\"This is some shitty code\"); return 0;}",
+            complicity: 1,
+            userRating: 2,
+            hints: []
+        });
+        code.hints.push({
+            hint: "Try looking at the includes"
+        }, {
+            hint: "Take a look at the line 14"
+        });
+        code.save();
     }
     readDummies() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -105,7 +120,7 @@ class Server {
         });
     }
     run() {
-        const port = process.env.PORT || 4000;
+        const port = process.env.PORT || 31337;
         const server = http.createServer(this.app);
         server.listen(port, () => {
             console.log(`Express server running on port ${port}.`);
