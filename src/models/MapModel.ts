@@ -1,5 +1,13 @@
 import { Model, model, Schema, Types } from "mongoose";
 
+export enum NodeType {
+    Empty = 0,
+    Obstacle = 1,
+    Player = 2,
+    Portal = 3,
+    Finish = 4
+}
+
 export interface IMap {
     title: string;
     description: string;
