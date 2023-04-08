@@ -11,6 +11,7 @@ var CommandType;
 //uradi check da li jer error polje u gameresultu undefined, ako nije doslo je do greske
 function runGame(map, code) {
     let fullCode = "";
+    //proveri dal treba da se skloni objectId iz mape
     let testMap = {
         title: 'Cool first level',
         description: 'Easy first level for dummies',
@@ -75,7 +76,6 @@ function runGame(map, code) {
         res = (0, vm_1.runInNewContext)(fullCode, { map: testMap });
     }
     catch (err) {
-        console.log("myerror" + err.stack);
         errorMessage = err.stack;
     }
     return {

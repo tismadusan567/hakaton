@@ -39,8 +39,13 @@ export class DbController implements AppRoute {
   constructor() {
     this.router.use(cors({ origin: "*" }));
 
-    this.router.post('/createMap', this.checkAuth, (request: Request, response: Response) => {
+    this.router.post('/createMap', this.checkAuth, async (request: Request, response: Response) => {
       try {
+        const checkMap = await MapModel.find({title: request.body.title});
+
+        if(checkMap)
+          return response.status(400).json({msg:"Map with that title already exists"});
+
         const newMap = new MapModel(request.body);
         newMap.save();
 

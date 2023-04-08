@@ -39,8 +39,11 @@ class DbController {
         this.route = "/db";
         this.router = (0, express_1.Router)();
         this.router.use((0, cors_1.default)({ origin: "*" }));
-        this.router.post('/createMap', this.checkAuth, (request, response) => {
+        this.router.post('/createMap', this.checkAuth, (request, response) => __awaiter(this, void 0, void 0, function* () {
             try {
+                const checkMap = yield MapModel_1.MapModel.find({ title: request.body.title });
+                if (checkMap)
+                    return response.status(400).json({ msg: "Map with that title already exists" });
                 const newMap = new MapModel_1.MapModel(request.body);
                 newMap.save();
                 return response.sendStatus(200);
@@ -48,7 +51,7 @@ class DbController {
             catch (e) {
                 return response.status(500).send(e);
             }
-        });
+        }));
         this.router.get('/getMaps', (request, response) => __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log("usao");
