@@ -3,6 +3,8 @@ import * as http from "http";
 import { json, urlencoded } from "body-parser";
 import { AppRouting } from './router/app-routing';
 import mongoose from 'mongoose';
+import { IMap, MapModel } from './models/MapModel';
+
 const path = require("path");
 require('dotenv').config();
 
@@ -19,7 +21,9 @@ export class Server {
     private configure() {
         this.configureMiddleware();
         this.configureRoutes();
-        // this.configureDb();
+        this.configureDb();
+        this.insertDummies();
+        this.readDummies().catch(err => console.log(err));
     }
 
     private configureMiddleware() {
@@ -30,16 +34,44 @@ export class Server {
     private configureRoutes() {
         const basePath = "/";
         this.app.use(basePath, this.router);
-        if (process.env.NODE_ENV == "production") {
-            this.app.use(express.static(path.join(__dirname, '/../client/build')));
-        }
+        // if (process.env.NODE_ENV == "production") {
+        //     this.app.use(express.static(path.join(__dirname, '/../client/build')));
+        // }
         new AppRouting(this.router);
     }
 
+    private insertDummies() {
+        const map = new MapModel({
+            width: 10,
+            height: 10,
+            complicityRating: 4,
+            userRating: 3,
+            levelMap: []
+        });
+
+        map.levelMap.push({
+            type: 1,
+            portalCoordinate: 3
+        },
+            {
+                type: 1,
+                portalCoordinate: 2
+            },);
+
+        map.save();
+    }
+
+    private async readDummies() {
+            const el: IMap | null = await MapModel.findOne({ height: 10 });
+            console.log(el);
+    }
+
     private configureDb() {
-        const db_url:string = process.env.DB_URL ?? "bruh";
+        // const db_url: string = process.env.DB_URL ?? "bruh";
+        const db_url: string = "mongodb+srv://vnikolic7821rn:frlqAT5jTsmTdZut@cluster0.dj5ugyr.mongodb.net/?retryWrites=true&w=majority";
+        console.log(db_url);
         mongoose.connect(db_url);
-        
+
         const flag = mongoose.connection;
 
         flag.once('open', () => {

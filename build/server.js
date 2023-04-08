@@ -22,6 +22,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -32,6 +41,7 @@ const http = __importStar(require("http"));
 const body_parser_1 = require("body-parser");
 const app_routing_1 = require("./router/app-routing");
 const mongoose_1 = __importDefault(require("mongoose"));
+const MapModel_1 = require("./models/MapModel");
 const path = require("path");
 require('dotenv').config();
 class Server {
@@ -41,10 +51,11 @@ class Server {
         this.configure();
     }
     configure() {
-        let a = 5;
         this.configureMiddleware();
         this.configureRoutes();
-        // this.configureDb();
+        this.configureDb();
+        this.insertDummies();
+        this.readDummies().catch(err => console.log(err));
     }
     configureMiddleware() {
         this.app.use((0, body_parser_1.json)({ limit: "50mb" }));
@@ -53,14 +64,38 @@ class Server {
     configureRoutes() {
         const basePath = "/";
         this.app.use(basePath, this.router);
-        if (process.env.NODE_ENV == "production") {
-            this.app.use(express_1.default.static(path.join(__dirname, '/../client/build')));
-        }
+        // if (process.env.NODE_ENV == "production") {
+        //     this.app.use(express.static(path.join(__dirname, '/../client/build')));
+        // }
         new app_routing_1.AppRouting(this.router);
     }
+    insertDummies() {
+        const map = new MapModel_1.MapModel({
+            width: 10,
+            height: 10,
+            complicityRating: 4,
+            userRating: 3,
+            levelMap: []
+        });
+        map.levelMap.push({
+            type: 1,
+            portalCoordinate: 3
+        }, {
+            type: 1,
+            portalCoordinate: 2
+        });
+        map.save();
+    }
+    readDummies() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const el = yield MapModel_1.MapModel.findOne({ height: 10 });
+            console.log(el);
+        });
+    }
     configureDb() {
-        var _a;
-        const db_url = (_a = process.env.DB_URL) !== null && _a !== void 0 ? _a : "bruh";
+        // const db_url: string = process.env.DB_URL ?? "bruh";
+        const db_url = "mongodb+srv://vnikolic7821rn:frlqAT5jTsmTdZut@cluster0.dj5ugyr.mongodb.net/?retryWrites=true&w=majority";
+        console.log(db_url);
         mongoose_1.default.connect(db_url);
         const flag = mongoose_1.default.connection;
         flag.once('open', () => {

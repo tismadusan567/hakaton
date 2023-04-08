@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
 import { AppRoute } from "../router/app-route";
+import { MapModel } from '../models/MapModel';
 import cors from "cors";
 
 export class DbController implements AppRoute {
@@ -8,16 +9,24 @@ export class DbController implements AppRoute {
 
   constructor() {
     this.router.use(cors({ origin: "*" }));
-    
-    //endpoint
-    this.router.get('/check', cors(), (request, response) => {
-        this.checkEndpoint(request, response);
+
+    this.router.post('/createMap', (request: Request, response: Response) => {
+      try {
+        const newMap = new MapModel(request.body);
+        newMap.save();
+
+        return response.sendStatus(200);
+      } catch (e) {
+        return response.status(500).send(e);
+      }
     });
-  }
 
-  public async checkEndpoint(req: Request, res: Response) {
-    res.status(200).json({msg: "Check"});
-
-    return;
+    this.router.get('/getMaps', (request: Request, response: Response) => {
+      try{
+        
+      }catch(e){
+        return response.status(500).send(e);
+      }
+    });
   }
 }
