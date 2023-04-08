@@ -1,7 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MapModel = exports.MapSchema = void 0;
+exports.MapModel = exports.MapSchema = exports.NodeType = void 0;
 const mongoose_1 = require("mongoose");
+var NodeType;
+(function (NodeType) {
+    NodeType[NodeType["Empty"] = 0] = "Empty";
+    NodeType[NodeType["Obstacle"] = 1] = "Obstacle";
+    NodeType[NodeType["Player"] = 2] = "Player";
+    NodeType[NodeType["Portal"] = 3] = "Portal";
+    NodeType[NodeType["Finish"] = 4] = "Finish";
+})(NodeType = exports.NodeType || (exports.NodeType = {}));
 // string - ts type
 // String - mongoose type
 exports.MapSchema = new mongoose_1.Schema({

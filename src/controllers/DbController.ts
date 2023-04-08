@@ -26,7 +26,6 @@ export class DbController implements AppRoute {
       try {
         const maps = await MapModel.find();
 
-        console.log(typeof maps);
         runGame(maps[0], "");
 
 
