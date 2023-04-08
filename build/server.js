@@ -43,6 +43,7 @@ const app_routing_1 = require("./router/app-routing");
 const mongoose_1 = __importDefault(require("mongoose"));
 const MapModel_1 = require("./models/MapModel");
 const CodeModel_1 = require("./models/CodeModel");
+const UserModel_1 = require("./models/UserModel");
 const path = require("path");
 require('dotenv').config();
 class Server {
@@ -89,7 +90,7 @@ class Server {
         });
         map.save();
         const code = new CodeModel_1.CodeModel({
-            title: "C - Segmentation fault problem 1",
+            title: "C - Segmentation fault problem 3",
             problemDescription: "Identify block of code which causes segmentation fault in C",
             sourceCode: "#include <stdio.h>#include<stdlib.h> int main(){ printf(\"This is some shitty code\"); return 0;}",
             complicity: 1,
@@ -99,9 +100,17 @@ class Server {
         code.hints.push({
             hint: "Try looking at the includes"
         }, {
-            hint: "Take a look at the line 14"
+            hint: "Take a look at the line 154"
         });
         code.save();
+        const user = new UserModel_1.UserModel({
+            firstName: "Dusan",
+            lastname: "Tisma",
+            email: "dusantisma123@gmail.com",
+            password: "$2a$10$K07Hs4CHu5qAFiTTkZDANOxSyLaSOoyn./bn4Zdq9toDXxMD6t49q",
+            username: "dtisma2021"
+        });
+        user.save();
     }
     readDummies() {
         return __awaiter(this, void 0, void 0, function* () {

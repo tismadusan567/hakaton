@@ -12,42 +12,58 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DbController = void 0;
+exports.AuthController = void 0;
 const express_1 = require("express");
 const MapModel_1 = require("../models/MapModel");
 const Game_1 = require("../game/Game");
 const CodeModel_1 = require("../models/CodeModel");
+const UserModel_1 = require("../models/UserModel");
 const cors_1 = __importDefault(require("cors"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-class DbController {
-    checkAuth(req, res, next) {
-        const authHeader = req.headers['authorization'];
-        const token = authHeader && authHeader.split(' ')[1];
-        if (token == null)
-            return res.status(401).json({ msg: "Check auth failed" });
-        jsonwebtoken_1.default.verify(token, "wb6UxoNuoMb49hkqdqkXQqwQmSQsRlu6l8TczU1I3YoBXsHW6R8mqETCOKaCQswU", (err, user) => {
-            if (err)
-                return res.status(403).json({ msg: err });
-            const obj = user;
-            req.body.username = obj.username;
-            console.log(req.body.username);
-            next();
-        });
-    }
+require('dotenv').config();
+class AuthController {
     constructor() {
-        this.route = "/db";
+        this.route = "/auth";
         this.router = (0, express_1.Router)();
         this.router.use((0, cors_1.default)({ origin: "*" }));
-        this.router.post('/createMap', this.checkAuth, (request, response) => {
+        this.router.post('/register', (request, response) => {
             try {
-                const newMap = new MapModel_1.MapModel(request.body);
-                newMap.save();
+                const data = {
+                    username: request.body.username,
+                    password: bcrypt_1.default.hashSync(request.body.password, 10),
+                    firstName: request.body.firstName,
+                    lastname: request.body.lastname,
+                    email: request.body.email
+                };
+                const newUser = new UserModel_1.UserModel(data);
+                newUser.save();
                 return response.sendStatus(200);
             }
             catch (e) {
                 return response.status(500).send(e);
             }
         });
+        this.router.post('/login', (request, response) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const user = yield UserModel_1.UserModel.findOne({ username: request.body.username });
+                if (user == null)
+                    return response.status(500);
+                if (bcrypt_1.default.compareSync(request.body.password, user.password)) {
+                    const obj = {
+                        user: user.username
+                    };
+                    const token = jsonwebtoken_1.default.sign(obj, "wb6UxoNuoMb49hkqdqkXQqwQmSQsRlu6l8TczU1I3YoBXsHW6R8mqETCOKaCQswU");
+                    return response.json({ token: token });
+                }
+                else {
+                    response.status(400).json({ msg: "Invalid credentials" });
+                }
+            }
+            catch (e) {
+                return response.status(500).send(e);
+            }
+        }));
         this.router.get('/getMaps', (request, response) => __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log("usao");
@@ -101,4 +117,4 @@ class DbController {
         }));
     }
 }
-exports.DbController = DbController;
+exports.AuthController = AuthController;
