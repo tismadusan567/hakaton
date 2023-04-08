@@ -42,6 +42,8 @@ export class Server {
 
     private insertDummies() {
         const map = new MapModel({
+            title: "Cool first level",
+            description: "Easy first level for dummies",
             width: 10,
             height: 10,
             complicityRating: 4,
@@ -62,8 +64,8 @@ export class Server {
     }
 
     private async readDummies() {
-            const el: IMap | null = await MapModel.findOne({ height: 10 });
-            console.log(el);
+        const el: IMap | null = await MapModel.findOne({ height: 10 });
+        console.log(el);
     }
 
     private configureDb() {

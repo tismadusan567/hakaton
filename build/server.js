@@ -71,6 +71,8 @@ class Server {
     }
     insertDummies() {
         const map = new MapModel_1.MapModel({
+            title: "Cool first level",
+            description: "Easy first level for dummies",
             width: 10,
             height: 10,
             complicityRating: 4,
