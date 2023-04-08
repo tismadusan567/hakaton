@@ -15,6 +15,7 @@ export interface IMap {
     height: number;
     complicityRating: number;
     userRating: number;
+    creatorUsername: string;
     levelMap: INode[];
 }
 
@@ -40,6 +41,7 @@ export const MapSchema = new Schema<IMap, MapModelType>({
     height: Number,
     complicityRating: Number,
     userRating: Number,
+    creatorUsername: String,
     levelMap: [new Schema<INode>({ type: Number, portalCoordinate: Number })]
 });
 

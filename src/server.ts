@@ -5,6 +5,7 @@ import { AppRouting } from './router/app-routing';
 import mongoose from 'mongoose';
 import { IMap, MapModel } from './models/MapModel';
 import { CodeModel } from './models/CodeModel';
+import { UserModel } from './models/UserModel';
 
 const path = require("path");
 require('dotenv').config();
@@ -64,7 +65,7 @@ export class Server {
         map.save();
 
         const code = new CodeModel({
-            title: "C - Segmentation fault problem 1",
+            title: "C - Segmentation fault problem 3",
             problemDescription: "Identify block of code which causes segmentation fault in C",
             sourceCode: "#include <stdio.h>#include<stdlib.h> int main(){ printf(\"This is some shitty code\"); return 0;}",
             complicity: 1,
@@ -77,11 +78,21 @@ export class Server {
                 hint: "Try looking at the includes"
             },
             {
-                hint: "Take a look at the line 14"
+                hint: "Take a look at the line 154"
             }
         );
 
         code.save();
+
+        const user = new UserModel({
+            firstName: "Dusan",
+            lastname: "Tisma",
+            email: "dusantisma123@gmail.com",
+            password: "$2a$10$K07Hs4CHu5qAFiTTkZDANOxSyLaSOoyn./bn4Zdq9toDXxMD6t49q",
+            username: "dtisma2021"
+        });
+
+        user.save();
     }
 
     private async readDummies() {
@@ -99,7 +110,7 @@ export class Server {
 
         flag.once('open', () => {
             console.log("Database connection established succesfully!");
-        })
+        });
     }
 
     public run() {

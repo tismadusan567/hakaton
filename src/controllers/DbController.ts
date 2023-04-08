@@ -4,16 +4,40 @@ import { MapModel } from '../models/MapModel';
 import { runGame } from "../game/Game";
 import { CodeModel } from "../models/CodeModel";
 import cors from "cors";
+import jwt from "jsonwebtoken";
 import { request } from "http";
+
+interface User{
+  username: String;
+}
 
 export class DbController implements AppRoute {
   public route: string = "/db";
   router: Router = Router();
 
+  private checkAuth(req: Request, res: Response, next: any){
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if(token == null) return res.status(401).json({msg: "Check auth failed"});
+
+    jwt.verify(token, "wb6UxoNuoMb49hkqdqkXQqwQmSQsRlu6l8TczU1I3YoBXsHW6R8mqETCOKaCQswU", (err, user) => {
+      if(err) return res.status(403).json({msg: err});
+
+      const obj = user as User;
+
+      req.body.username = obj.username;
+
+      console.log(req.body.username);
+
+      next();
+    });
+  }
+
   constructor() {
     this.router.use(cors({ origin: "*" }));
 
-    this.router.post('/createMap', (request: Request, response: Response) => {
+    this.router.post('/createMap', this.checkAuth, (request: Request, response: Response) => {
       try {
         const newMap = new MapModel(request.body);
         newMap.save();
