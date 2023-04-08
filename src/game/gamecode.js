@@ -1,28 +1,3 @@
-const map = {
-    _id: new ObjectId("643197a020cdee3dcde47a50"),
-    title: 'Cool first level',
-    description: 'Easy first level for dummies',
-    width: 10,
-    height: 10,
-    complicityRating: 4,
-    userRating: 3,
-    levelMap: [
-      {
-        type: 1,
-        portalCoordinate: 3,
-        _id: new ObjectId("643197a020cdee3dcde47a51")
-      },
-      {
-        type: 1,
-        portalCoordinate: 2,
-        _id: new ObjectId("643197a020cdee3dcde47a52")
-      }
-    ],
-    __v: 0
-  }
-
-
-
 const empty = 0;
 const obstacle = 1;
 const player = 2;
@@ -43,23 +18,25 @@ let finished = false;
 
 const posToCoords = (coords) => {
     return {
-        x: coords / width,
+        x: Math.floor(coords / width),
         y: coords % width
     }
-}
+};
 
 const coordsToPos = (x, y) => {
     return x * width + y;
-}
+};
 
 for(let i = 0;i < width * height;i++) {
     if (levelMap[i]['type'] == player) {
         currPos = i;
         break;
     }
-}
+};
 
 const MoveToNode = (src, dest) => {
+    console.log(src);
+    console.log(dest);
     if (dest.x < 0 || dest.x > height - 1 || dest.y < 0 || dest.y > width - 1) {
         return;
     }
@@ -68,74 +45,70 @@ const MoveToNode = (src, dest) => {
     const destNode = levelMap[coordsToPos(dest.x, dest.y)];
     const destType = destNode['type'];
 
-    let newPos = src;
+    let newCoords = src;
     let type = -1;
 
     switch (destType) {
         case empty:
             finished = false;
-            newPos = dest;
+            newCoords = dest;
             type = walkCommand;
             break;
         case finish:
             finished = true;
-            newPos = dest;
+            newCoords = dest;
             type = walkCommand;
             break;
         case portal:
             finished = false;
-            newPos = posToCoords(destNode['portal']);
+            newCoords = posToCoords(destNode['portalCoordinate']);
             type = teleportCommand;
             break;
-        default:
-            finished = false;
-            break;
     }
 
-    if (newPos != src) {
+    if (newCoords != src) {
         commandList.push({
             type: type,
-            x: newPos.x,
-            y: newPos.y
+            x: newCoords.x,
+            y: newCoords.y
         });
-        currPos = newPos;
+        currPos = coordsToPos(newCoords.x, newCoords.y);
     }
 
-}
+    console.log(newCoords);
+    console.log(currPos);
+    console.log('----------------------');
+
+};
 
 const MoveLeft = () => {
     const pos = posToCoords(currPos);
-    moveToNode(pos, {
+    MoveToNode(pos, {
         x: pos.x,
         y: pos.y - 1
     });
-}
+};
 
 const MoveRight = () => {
     const pos = posToCoords(currPos);
-    moveToNode(pos, {
+    MoveToNode(pos, {
         x: pos.x,
         y: pos.y + 1
     });
-}
+};
 
 const MoveUp = () => {
     const pos = posToCoords(currPos);
-    moveToNode(pos, {
+    MoveToNode(pos, {
         x: pos.x - 1,
         y: pos.y
     });
-}
+};
 
 const MoveDown = () => {
     const pos = posToCoords(currPos);
-    moveToNode(pos, {
+    MoveToNode(pos, {
         x: pos.x + 1,
-        y: pos.y - 1
+        y: pos.y
     });
-}
-
-console.log(commandList);
-console.log(finished);
-
-
+}; 
