@@ -23,62 +23,15 @@ export interface IGameResult {
 export function runGame(map: IMap, code: string): IGameResult {
     let fullCode = "";
 
-    //proveri dal treba da se skloni objectId iz mape
-    let testMap = {
-        title: 'Cool first level',
-        description: 'Easy first level for dummies',
-        width: 3,
-        height: 3,
-        complicityRating: 4,
-        userRating: 3,
-        levelMap: [
-          {
-            type: 2,
-            portalCoordinate: 3,
-          },
-          {
-            type: 3,
-            portalCoordinate: 7,
-          },
-          {
-            type: 0,
-            portalCoordinate: 3,
-          },
-          {
-            type: 0,
-            portalCoordinate: 3,
-          },
-          {
-            type: 0,
-            portalCoordinate: 3,
-          },
-          {
-            type: 0,
-            portalCoordinate: 3,
-          },
-          {
-            type: 0,
-            portalCoordinate: 3,
-          },
-          {
-            type: 3,
-            portalCoordinate: 1,
-          },
-          {
-            type: 4,
-            portalCoordinate: 3,
-          },
-        ],
-        __v: 0
-    };
-
     try {
 
         let data = readFileSync('./src/game/gamecode.js', 'utf8');
         fullCode += data + "\n";
 
-        data = readFileSync('./src/game/testcode.js', 'utf8');
-        fullCode += data + "\n";
+        // data = readFileSync('./src/game/testcode.js', 'utf8');
+        // fullCode += data + "\n";
+
+        fullCode += code + "\n";
 
         data = readFileSync('./src/game/postprocess.js', 'utf8');
         fullCode += data + "\n";
@@ -89,7 +42,7 @@ export function runGame(map: IMap, code: string): IGameResult {
     let res = undefined
     let errorMessage = undefined;
     try {
-        res = runInNewContext(fullCode, {map: testMap});
+        res = runInNewContext(fullCode, {map: map});
     } catch (err) {
         errorMessage = (err as Error).stack;
     }

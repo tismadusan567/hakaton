@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DbController = void 0;
 const express_1 = require("express");
 const MapModel_1 = require("../models/MapModel");
-const Game_1 = require("../game/Game");
 const CodeModel_1 = require("../models/CodeModel");
 const cors_1 = __importDefault(require("cors"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -53,8 +52,6 @@ class DbController {
             try {
                 console.log("usao");
                 const maps = yield MapModel_1.MapModel.find();
-                const res = (0, Game_1.runGame)(maps[0], "");
-                console.log(res);
                 return response.status(200).json(maps);
             }
             catch (e) {

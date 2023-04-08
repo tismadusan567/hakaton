@@ -1,11 +1,9 @@
 import { Router, Request, Response } from "express";
 import { AppRoute } from "../router/app-route";
 import { MapModel } from '../models/MapModel';
-import { runGame } from "../game/Game";
 import { CodeModel } from "../models/CodeModel";
 import cors from "cors";
 import jwt from "jsonwebtoken";
-import { request } from "http";
 
 interface User {
   user: String;
@@ -54,9 +52,6 @@ export class DbController implements AppRoute {
       try {
         console.log("usao");
         const maps = await MapModel.find();
-
-        const res = runGame(maps[0], "");
-        console.log(res);
 
 
         return response.status(200).json(maps);
