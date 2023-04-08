@@ -55,7 +55,8 @@ export class DbController implements AppRoute {
         console.log("usao");
         const maps = await MapModel.find();
 
-        runGame(maps[0], "");
+        const res = runGame(maps[0], "");
+        console.log(res);
 
 
         return response.status(200).json(maps);

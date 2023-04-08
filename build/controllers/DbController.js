@@ -53,7 +53,8 @@ class DbController {
             try {
                 console.log("usao");
                 const maps = yield MapModel_1.MapModel.find();
-                (0, Game_1.runGame)(maps[0], "");
+                const res = (0, Game_1.runGame)(maps[0], "");
+                console.log(res);
                 return response.status(200).json(maps);
             }
             catch (e) {
