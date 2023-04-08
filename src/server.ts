@@ -19,7 +19,7 @@ export class Server {
     private configure() {
         this.configureMiddleware();
         this.configureRoutes();
-        this.configureDb();
+        // this.configureDb();
     }
 
     private configureMiddleware() {

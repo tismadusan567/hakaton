@@ -41,9 +41,10 @@ class Server {
         this.configure();
     }
     configure() {
+        let a = 5;
         this.configureMiddleware();
         this.configureRoutes();
-        this.configureDb();
+        // this.configureDb();
     }
     configureMiddleware() {
         this.app.use((0, body_parser_1.json)({ limit: "50mb" }));
