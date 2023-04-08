@@ -8,6 +8,7 @@ exports.CodeSchema = new mongoose_1.Schema({
     sourceCode: String,
     complicity: Number,
     userRating: Number,
+    creatorUsername: String,
     hints: [new mongoose_1.Schema({ hint: String })]
 });
 exports.CodeModel = (0, mongoose_1.model)("Code", exports.CodeSchema);

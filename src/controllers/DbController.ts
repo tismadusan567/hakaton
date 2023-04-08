@@ -7,26 +7,28 @@ import cors from "cors";
 import jwt from "jsonwebtoken";
 import { request } from "http";
 
-interface User{
-  username: String;
+interface User {
+  user: String;
 }
 
 export class DbController implements AppRoute {
   public route: string = "/db";
   router: Router = Router();
 
-  private checkAuth(req: Request, res: Response, next: any){
+  private checkAuth(req: Request, res: Response, next: Function) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
-    if(token == null) return res.status(401).json({msg: "Check auth failed"});
+    if (token == null) return res.status(401).json({ msg: "Check auth failed" });
 
     jwt.verify(token, "wb6UxoNuoMb49hkqdqkXQqwQmSQsRlu6l8TczU1I3YoBXsHW6R8mqETCOKaCQswU", (err, user) => {
-      if(err) return res.status(403).json({msg: err});
+      if (err) return res.status(403).json({ msg: err });
 
       const obj = user as User;
 
-      req.body.username = obj.username;
+      console.log("Parsed ", obj);
+
+      req.body.creatorUsername = obj.user as String;
 
       console.log(req.body.username);
 
@@ -63,6 +65,16 @@ export class DbController implements AppRoute {
       }
     });
 
+    this.router.get('/getMaps/:creatorName', this.checkAuth, async (request: Request, response: Response) => {
+      try {
+        const maps = await MapModel.find({ creatorUsername: request.params.creatorName });
+
+        return response.status(200).json(maps);
+      } catch (e) {
+        return response.status(500).send(e);
+      }
+    });
+
     this.router.get('/getMap/:title', async (request: Request, response: Response) => {
       try {
         const map = await MapModel.findOne({ title: request.params.title });
@@ -75,7 +87,7 @@ export class DbController implements AppRoute {
       }
     });
 
-    this.router.post('/addCode', (request: Request, response: Response) => {
+    this.router.post('/addCode', this.checkAuth, (request: Request, response: Response) => {
       try {
         const newCode = new CodeModel(request.body);
         newCode.save();

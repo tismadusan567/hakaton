@@ -6,6 +6,7 @@ export interface ICode {
     sourceCode: string;
     complicity: number;
     userRating: number;
+    creatorUsername: string;
     hints: IHint[];
 }
 
@@ -26,6 +27,7 @@ export const CodeSchema = new Schema<ICode, CodeModelType>({
     sourceCode: String,
     complicity: Number,
     userRating: Number,
+    creatorUsername: String,
     hints: [new Schema<IHint>({hint: String})]
 });
 

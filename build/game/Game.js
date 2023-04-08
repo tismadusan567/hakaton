@@ -65,6 +65,6 @@ function runGame(map, code) {
     }
     const res = (0, vm_1.runInNewContext)(fullCode, { map: testMap });
     console.log(res);
-    console.log(typeof res);
+    return res;
 }
 exports.runGame = runGame;

@@ -29,7 +29,8 @@ class DbController {
             if (err)
                 return res.status(403).json({ msg: err });
             const obj = user;
-            req.body.username = obj.username;
+            console.log("Parsed ", obj);
+            req.body.creatorUsername = obj.user;
             console.log(req.body.username);
             next();
         });
@@ -60,6 +61,15 @@ class DbController {
                 return response.status(500).send(e);
             }
         }));
+        this.router.get('/getMaps/:creatorName', this.checkAuth, (request, response) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const maps = yield MapModel_1.MapModel.find({ creatorUsername: request.params.creatorName });
+                return response.status(200).json(maps);
+            }
+            catch (e) {
+                return response.status(500).send(e);
+            }
+        }));
         this.router.get('/getMap/:title', (request, response) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const map = yield MapModel_1.MapModel.findOne({ title: request.params.title });
@@ -70,7 +80,7 @@ class DbController {
                 return response.status(500).send(e);
             }
         }));
-        this.router.post('/addCode', (request, response) => {
+        this.router.post('/addCode', this.checkAuth, (request, response) => {
             try {
                 const newCode = new CodeModel_1.CodeModel(request.body);
                 newCode.save();
