@@ -1,7 +1,6 @@
 import { Router, Request, Response } from "express";
 import { AppRoute } from "../router/app-route";
-import { MapModel } from '../models/MapModel';
-import { runGame } from "../game/Game";
+import { IMap, MapModel } from '../models/MapModel';
 import { CodeModel } from "../models/CodeModel";
 import cors from "cors";
 import jwt from "jsonwebtoken";
@@ -36,6 +35,58 @@ export class DbController implements AppRoute {
     });
   }
 
+  private convertMapToFrontendMap(map: IMap): any {
+    const frontMap: any = {
+      title: map.title,
+      description: map.description,
+      width: map.width,
+      height: map.height,
+      complicityRating: map.complicityRating,
+      userRating: map.complicityRating,
+      numOfUserGrades: map.numOfUserGrades,
+      numOfComplicityGrades: map.numOfComplicityGrades,
+      creatorUsername: map.creatorUsername,
+      levelMap: []
+    }
+
+    const frontLevelMap = [];
+    for (let i = 0; i < map.height;i++) {
+      const temp = [];
+      for (let j = 0;j < map.width;j++) {
+        temp.push(map.levelMap[i*map.width + j]);
+      }
+      frontLevelMap.push(temp);
+    }
+
+
+    frontMap.levelMap = frontLevelMap;
+
+    return frontMap;
+  }
+
+  private convertFrontendMaptoMap(frontMap: any) {
+    const map = new MapModel({
+      title: frontMap.title,
+      description: frontMap.description,
+      width: frontMap.width,
+      height: frontMap.height,
+      complicityRating: frontMap.complicityRating,
+      userRating: frontMap.userRating,
+      numOfUserGrades: frontMap.numOfUserGrades,
+      numOfComplicityGrades: frontMap.numOfComplicityGrades,
+      levelMap: []
+  });
+
+  frontMap.levelMap.flat(Infinity).forEach((element: { type: any; portalCoordinate: any; }) => {
+    map.levelMap.push({
+      type: element.type,
+      portalCoordinate: element.portalCoordinate
+    })
+  });
+
+  return map;
+  }
+
   constructor() {
     this.router.use(cors({ origin: "*" }));
 
@@ -65,9 +116,10 @@ export class DbController implements AppRoute {
         console.log("usao");
         const maps = await MapModel.find();
 
-        const res = runGame(maps[0], "");
-        console.log(res);
-
+        const map = maps[maps.length - 1];
+        console.log(map)
+        console.log(JSON.stringify(this.convertMapToFrontendMap(map)));
+        console.log(this.convertFrontendMaptoMap(this.convertMapToFrontendMap(map)));
 
         return response.status(200).json(maps);
       } catch (e) {

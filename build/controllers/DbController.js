@@ -34,6 +34,50 @@ class DbController {
             next();
         });
     }
+    convertMapToFrontendMap(map) {
+        const frontMap = {
+            title: map.title,
+            description: map.description,
+            width: map.width,
+            height: map.height,
+            complicityRating: map.complicityRating,
+            userRating: map.complicityRating,
+            numOfUserGrades: map.numOfUserGrades,
+            numOfComplicityGrades: map.numOfComplicityGrades,
+            creatorUsername: map.creatorUsername,
+            levelMap: []
+        };
+        const frontLevelMap = [];
+        for (let i = 0; i < map.height; i++) {
+            const temp = [];
+            for (let j = 0; j < map.width; j++) {
+                temp.push(map.levelMap[i * map.width + j]);
+            }
+            frontLevelMap.push(temp);
+        }
+        frontMap.levelMap = frontLevelMap;
+        return frontMap;
+    }
+    convertFrontendMaptoMap(frontMap) {
+        const map = new MapModel_1.MapModel({
+            title: frontMap.title,
+            description: frontMap.description,
+            width: frontMap.width,
+            height: frontMap.height,
+            complicityRating: frontMap.complicityRating,
+            userRating: frontMap.userRating,
+            numOfUserGrades: frontMap.numOfUserGrades,
+            numOfComplicityGrades: frontMap.numOfComplicityGrades,
+            levelMap: []
+        });
+        frontMap.levelMap.flat(Infinity).forEach((element) => {
+            map.levelMap.push({
+                type: element.type,
+                portalCoordinate: element.portalCoordinate
+            });
+        });
+        return map;
+    }
     constructor() {
         this.route = "/db";
         this.router = (0, express_1.Router)();
@@ -55,6 +99,10 @@ class DbController {
             try {
                 console.log("usao");
                 const maps = yield MapModel_1.MapModel.find();
+                const map = maps[maps.length - 1];
+                console.log(map);
+                console.log(JSON.stringify(this.convertMapToFrontendMap(map)));
+                console.log(this.convertFrontendMaptoMap(this.convertMapToFrontendMap(map)));
                 return response.status(200).json(maps);
             }
             catch (e) {

@@ -42,7 +42,7 @@ export function runGame(map: IMap, code: string): IGameResult {
     let res = undefined
     let errorMessage = undefined;
     try {
-        res = runInNewContext(fullCode, {map: map});
+        res = runInNewContext(fullCode, {map: map}, {timeout: 5000});
     } catch (err) {
         errorMessage = (err as Error).stack;
     }
