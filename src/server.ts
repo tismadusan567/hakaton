@@ -130,7 +130,7 @@ export class Server {
     }
 
     private async readDummies() {
-        const el: IMap | null = await MapModel.findOne({ height: 10 });
+        const el: IMap | null = await MapModel.findOne({ height: 3 });
         console.log(el);
     }
 

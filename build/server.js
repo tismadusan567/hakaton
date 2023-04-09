@@ -139,7 +139,7 @@ class Server {
     }
     readDummies() {
         return __awaiter(this, void 0, void 0, function* () {
-            const el = yield MapModel_1.MapModel.findOne({ height: 10 });
+            const el = yield MapModel_1.MapModel.findOne({ height: 3 });
             console.log(el);
         });
     }
