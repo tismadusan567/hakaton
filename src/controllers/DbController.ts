@@ -186,7 +186,7 @@ export class DbController implements AppRoute {
 
     this.router.get('/getCode/:mapTitle', async (request: Request, response: Response) => {
       try {
-        const map = await MapModel.findOne({ mapTitle: request.params.mapTitle });
+        const map = await MapModel.findOne({ title: request.params.mapTitle });
 
         if (map == null)
           return response.status(404).json({ error: "Map not found" });
