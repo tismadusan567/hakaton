@@ -45,6 +45,7 @@ class DbController {
             numOfUserGrades: map.numOfUserGrades,
             numOfComplicityGrades: map.numOfComplicityGrades,
             creatorUsername: map.creatorUsername,
+            debugTask: map.debugTask,
             levelMap: []
         };
         const frontLevelMap = [];
@@ -68,6 +69,7 @@ class DbController {
             userRating: frontMap.userRating,
             numOfUserGrades: frontMap.numOfUserGrades,
             numOfComplicityGrades: frontMap.numOfComplicityGrades,
+            debugTask: frontMap.debugTask,
             levelMap: []
         });
         frontMap.levelMap.flat(Infinity).forEach((element) => {
@@ -85,11 +87,13 @@ class DbController {
         this.router = (0, express_1.Router)();
         this.router.use((0, cors_1.default)({ origin: "*" }));
         this.router.post('/createMap', this.checkAuth, (request, response) => __awaiter(this, void 0, void 0, function* () {
+            var _a;
             try {
                 request.body.complicityRating = 5;
                 request.body.userRating = 5;
                 request.body.numOfUserGrades = 1;
                 request.body.numOfComplicityGrades = 1;
+                request.body.debugTask = (_a = request.body.debugTask) !== null && _a !== void 0 ? _a : false;
                 const checkMap = yield MapModel_1.MapModel.findOne({ title: request.body.title });
                 if (checkMap)
                     return response.status(400).json({ msg: "Map with that title already exists" });
@@ -164,8 +168,17 @@ class DbController {
         }));
         this.router.get('/getCode/:mapTitle', (request, response) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const code = yield CodeModel_1.CodeModel.find({ mapTitle: request.params.mapTitle });
-                const randomCode = code[Math.floor(Math.random() * code.length)];
+                const map = yield MapModel_1.MapModel.findOne({ title: request.params.mapTitle });
+                if (map == null)
+                    return response.status(404).json({ error: "Map not found" });
+                let randomCode;
+                if (map.debugTask) {
+                    let code = yield CodeModel_1.CodeModel.find({ mapTitle: request.params.mapTitle });
+                    randomCode = code[Math.floor(Math.random() * code.length)];
+                }
+                else {
+                    randomCode = "const solve () => {\n\n};";
+                }
                 return response.status(200).json(randomCode);
             }
             catch (e) {
