@@ -88,7 +88,11 @@ class DbController {
                 request.body.userRating = 5;
                 request.body.numOfUserGrades = 1;
                 request.body.numOfComplicityGrades = 1;
+<<<<<<< HEAD
+                const checkMap = yield MapModel_1.MapModel.findOne({ title: request.body.title });
+=======
                 const checkMap = yield MapModel_1.MapModel.find({ title: request.body.title });
+>>>>>>> e151f037f29e163bdeed42c7ef21d77299d6f777
                 if (checkMap)
                     return response.status(400).json({ msg: "Map with that title already exists" });
                 const newMap = this.convertFrontendMaptoMap(request.body);
