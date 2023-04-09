@@ -7,6 +7,7 @@ export interface ICode {
     complicity: number;
     userRating: number;
     creatorUsername: string;
+    mapTitle: string;
     hints: IHint[];
 }
 
@@ -28,6 +29,7 @@ export const CodeSchema = new Schema<ICode, CodeModelType>({
     complicity: Number,
     userRating: Number,
     creatorUsername: String,
+    mapTitle: String,
     hints: [new Schema<IHint>({hint: String})]
 });
 

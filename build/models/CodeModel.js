@@ -9,6 +9,7 @@ exports.CodeSchema = new mongoose_1.Schema({
     complicity: Number,
     userRating: Number,
     creatorUsername: String,
+    mapTitle: String,
     hints: [new mongoose_1.Schema({ hint: String })]
 });
 exports.CodeModel = (0, mongoose_1.model)("Code", exports.CodeSchema);

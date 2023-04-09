@@ -43,64 +43,37 @@ export class Server {
     }
 
     private insertDummies() {
-        const map = new MapModel({
-            title: 'map1',
-            description: 'Easy first level for dummies',
-            width: 3,
-            height: 3,
-            complicityRating: 4,
-            userRating: 3,
-            creatorUsername: "dusan",
-            levelMap: []
-        });
+        // const map = new MapModel({
+        //     title: "Tenth level",
+        //     description: "Easy first level for dummies",
+        //     width: 10,
+        //     height: 10,
+        //     complicityRating: 4,
+        //     userRating: 3,
+        //     numOfUserGrades: 1,
+        //     numOfComplicityGrades: 1,
+        //     levelMap: []
+        // });
 
-        map.levelMap.push(
-            {
-            type: 2,
-            portalCoordinate: 3,
-            },
-            {
-            type: 3,
-            portalCoordinate: 7,
-            },
-            {
-            type: 0,
-            portalCoordinate: 3,
-            },
-            {
-            type: 0,
-            portalCoordinate: 3,
-            },
-            {
-            type: 0,
-            portalCoordinate: 3,
-            },
-            {
-            type: 0,
-            portalCoordinate: 3,
-            },
-            {
-            type: 0,
-            portalCoordinate: 3,
-            },
-            {
-            type: 3,
-            portalCoordinate: 1,
-            },
-            {
-            type: 4,
-            portalCoordinate: 3,
-            }
-        );
+        // map.levelMap.push({
+        //     type: 1,
+        //     portalCoordinate: 3
+        // },
+        //     {
+        //         type: 1,
+        //         portalCoordinate: 2
+        //     },);
 
-        map.save();
+        // map.save();
 
         const code = new CodeModel({
-            title: "C - Segmentation fault problem 3",
-            problemDescription: "Identify block of code which causes segmentation fault in C",
-            sourceCode: "#include <stdio.h>#include<stdlib.h> int main(){ printf(\"This is some shitty code\"); return 0;}",
+            title: "Python problem 5",
+            problemDescription: "Find python error",
+            sourceCode: "def main(): time.sleep(30)",
             complicity: 1,
             userRating: 2,
+            creatorUsername: "tisma",
+            mapTitle: "Cool first level",
             hints: []
         });
 

@@ -38,8 +38,11 @@ class DbController {
         this.route = "/db";
         this.router = (0, express_1.Router)();
         this.router.use((0, cors_1.default)({ origin: "*" }));
-        this.router.post('/createMap', this.checkAuth, (request, response) => {
+        this.router.post('/createMap', this.checkAuth, (request, response) => __awaiter(this, void 0, void 0, function* () {
             try {
+                const checkMap = yield MapModel_1.MapModel.find({ title: request.body.title });
+                if (checkMap)
+                    return response.status(400).json({ msg: "Map with that title already exists" });
                 const newMap = new MapModel_1.MapModel(request.body);
                 newMap.save();
                 return response.sendStatus(200);
@@ -47,7 +50,7 @@ class DbController {
             catch (e) {
                 return response.status(500).send(e);
             }
-        });
+        }));
         this.router.get('/getMaps', (request, response) => __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log("usao");
@@ -97,13 +100,52 @@ class DbController {
                 return response.status(500).send(e);
             }
         }));
-        this.router.get('/getCode/:title', (request, response) => __awaiter(this, void 0, void 0, function* () {
+        this.router.get('/getCode/:mapTitle', (request, response) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const code = yield CodeModel_1.CodeModel.findOne({ title: request.params.title });
-                return response.status(200).json(code);
+                const code = yield CodeModel_1.CodeModel.find({ mapTitle: request.params.mapTitle });
+                const randomCode = code[Math.floor(Math.random() * code.length)];
+                return response.status(200).json(randomCode);
             }
             catch (e) {
                 return response.status(500).send(e);
+            }
+        }));
+        this.router.put('/rateMap/:title/:grade', (request, response) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const map = yield MapModel_1.MapModel.find({ title: request.params.title });
+                if (map == null)
+                    return response.status(404).json({ err: "Map not found" });
+                const objMap = map[map.length - 1];
+                const grade = parseInt(request.params.grade);
+                console.log("Grade ", grade);
+                console.log("UserRating ", objMap.userRating);
+                console.log("NumOfUseRgRADES ", objMap.numOfUserGrades);
+                objMap.userRating = (objMap.userRating * objMap.numOfUserGrades + grade) / (objMap.numOfUserGrades + 1);
+                objMap.numOfUserGrades += 1;
+                objMap.save();
+                return response.status(200).json(objMap);
+            }
+            catch (err) {
+                return response.status(500).json(err);
+            }
+        }));
+        this.router.put('/rateComplicity/:title/:grade', (request, response) => __awaiter(this, void 0, void 0, function* () {
+            try {
+                const map = yield MapModel_1.MapModel.find({ title: request.params.title });
+                if (map == null)
+                    return response.status(404).json({ err: "Map not found" });
+                const objMap = map[map.length - 1];
+                const grade = parseInt(request.params.grade);
+                console.log("Grade ", grade);
+                console.log("UserRating ", objMap.userRating);
+                console.log("NumOfUseRgRADES ", objMap.numOfUserGrades);
+                objMap.complicityRating = (objMap.complicityRating * objMap.numOfComplicityGrades + grade) / (objMap.numOfComplicityGrades + 1);
+                objMap.numOfComplicityGrades += 1;
+                objMap.save();
+                return response.status(200).json(objMap);
+            }
+            catch (err) {
+                return response.status(500).json(err);
             }
         }));
     }

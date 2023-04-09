@@ -37,8 +37,13 @@ export class DbController implements AppRoute {
   constructor() {
     this.router.use(cors({ origin: "*" }));
 
-    this.router.post('/createMap', this.checkAuth, (request: Request, response: Response) => {
+    this.router.post('/createMap', this.checkAuth, async (request: Request, response: Response) => {
       try {
+        const checkMap = await MapModel.find({ title: request.body.title });
+
+        if (checkMap)
+          return response.status(400).json({ msg: "Map with that title already exists" });
+
         const newMap = new MapModel(request.body);
         newMap.save();
 
@@ -104,14 +109,70 @@ export class DbController implements AppRoute {
       }
     });
 
-    this.router.get('/getCode/:title', async (request: Request, response: Response) => {
+    this.router.get('/getCode/:mapTitle', async (request: Request, response: Response) => {
       try {
-        const code = await CodeModel.findOne({ title: request.params.title });
+        const code = await CodeModel.find({ mapTitle: request.params.mapTitle });
 
-        return response.status(200).json(code);
+        const randomCode = code[Math.floor(Math.random() * code.length)];
+
+        return response.status(200).json(randomCode);
       } catch (e) {
         return response.status(500).send(e);
       }
-    })
+    });
+
+    this.router.put('/rateMap/:title/:grade', async (request: Request, response: Response) => {
+      try {
+        const map = await MapModel.find({ title: request.params.title });
+
+        if (map == null)
+          return response.status(404).json({ err: "Map not found" });
+
+        const objMap = map[map.length - 1];
+
+        const grade: number = parseInt(request.params.grade);
+
+        console.log("Grade ", grade);
+        console.log("UserRating ", objMap.userRating);
+        console.log("NumOfUseRgRADES ", objMap.numOfUserGrades);
+
+        objMap.userRating = (objMap.userRating * objMap.numOfUserGrades + grade) / (objMap.numOfUserGrades + 1);
+
+        objMap.numOfUserGrades += 1;
+
+        objMap.save();
+
+        return response.status(200).json(objMap);
+      } catch (err) {
+        return response.status(500).json(err);
+      }
+    });
+
+    this.router.put('/rateComplicity/:title/:grade', async (request: Request, response: Response) => {
+      try {
+        const map = await MapModel.find({ title: request.params.title });
+
+        if (map == null)
+          return response.status(404).json({ err: "Map not found" });
+
+        const objMap = map[map.length - 1];
+
+        const grade: number = parseInt(request.params.grade);
+
+        console.log("Grade ", grade);
+        console.log("UserRating ", objMap.userRating);
+        console.log("NumOfUseRgRADES ", objMap.numOfUserGrades);
+
+        objMap.complicityRating = (objMap.complicityRating * objMap.numOfComplicityGrades + grade) / (objMap.numOfComplicityGrades + 1);
+
+        objMap.numOfComplicityGrades += 1;
+
+        objMap.save();
+
+        return response.status(200).json(objMap);
+      } catch (err) {
+        return response.status(500).json(err);
+      }
+    });
   }
 }
