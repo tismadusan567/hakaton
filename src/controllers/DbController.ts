@@ -197,7 +197,7 @@ export class DbController implements AppRoute {
           let code = await CodeModel.find({ mapTitle: request.params.mapTitle });
           randomCode = code[Math.floor(Math.random() * code.length)];
         } else {
-          randomCode = "const solve () => {\n\n};";
+          randomCode = "const solve = () => {\n\n};";
         }
 
         return response.status(200).json(randomCode);
