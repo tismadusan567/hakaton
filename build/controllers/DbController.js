@@ -71,9 +71,11 @@ class DbController {
             levelMap: []
         });
         frontMap.levelMap.flat(Infinity).forEach((element) => {
+            var _a;
             map.levelMap.push({
-                type: element.type,
-                portalCoordinate: element.portalCoordinate
+                type: (_a = element.type) !== null && _a !== void 0 ? _a : 0,
+                portalCoordinate: element.portalCoordinate,
+                img: element.img
             });
         });
         return map;

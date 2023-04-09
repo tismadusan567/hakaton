@@ -25,6 +25,7 @@ export interface IMap {
 export interface INode {
     _id: Types.ObjectId;
     type: number;
+    img: string;
     portalCoordinate: number;
 }
 
@@ -48,7 +49,7 @@ export const MapSchema = new Schema<IMap, MapModelType>({
     numOfComplicityGrades: Number,
     creatorUsername: String,
     debugTask: Boolean,
-    levelMap: [new Schema<INode>({ type: Number, portalCoordinate: Number })]
+    levelMap: [new Schema<INode>({ type: Number, portalCoordinate: Number, img: String })]
 });
 
 export const MapModel = model<IMap, MapModelType>("Map", MapSchema);
