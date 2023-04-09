@@ -43,28 +43,58 @@ export class Server {
     }
 
     private insertDummies() {
-        // const map = new MapModel({
-        //     title: "Tenth level",
-        //     description: "Easy first level for dummies",
-        //     width: 10,
-        //     height: 10,
-        //     complicityRating: 4,
-        //     userRating: 3,
-        //     numOfUserGrades: 1,
-        //     numOfComplicityGrades: 1,
-        //     levelMap: []
-        // });
+        const map = new MapModel({
+            title: 'Cool first level',
+            description: 'Easy first level for dummies',
+            width: 3,
+            height: 3,
+            complicityRating: 4,
+            userRating: 3,
+            numOfUserGrades: 1,
+            numOfComplicityGrades: 1,
+            levelMap: []
+        });
 
-        // map.levelMap.push({
-        //     type: 1,
-        //     portalCoordinate: 3
-        // },
-        //     {
-        //         type: 1,
-        //         portalCoordinate: 2
-        //     },);
+        
 
-        // map.save();
+        map.levelMap.push({
+            type: 2,
+            portalCoordinate: 3,
+          },
+          {
+            type: 3,
+            portalCoordinate: 7,
+          },
+          {
+            type: 0,
+            portalCoordinate: 3,
+          },
+          {
+            type: 0,
+            portalCoordinate: 3,
+          },
+          {
+            type: 0,
+            portalCoordinate: 3,
+          },
+          {
+            type: 0,
+            portalCoordinate: 3,
+          },
+          {
+            type: 0,
+            portalCoordinate: 3,
+          },
+          {
+            type: 3,
+            portalCoordinate: 1,
+          },
+          {
+            type: 4,
+            portalCoordinate: 3,
+          });
+
+        map.save();
 
         const code = new CodeModel({
             title: "Python problem 5",
