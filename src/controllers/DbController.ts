@@ -46,14 +46,15 @@ export class DbController implements AppRoute {
       numOfUserGrades: map.numOfUserGrades,
       numOfComplicityGrades: map.numOfComplicityGrades,
       creatorUsername: map.creatorUsername,
+      debugTask: map.debugTask,
       levelMap: []
     }
 
     const frontLevelMap = [];
-    for (let i = 0; i < map.height;i++) {
+    for (let i = 0; i < map.height; i++) {
       const temp = [];
-      for (let j = 0;j < map.width;j++) {
-        temp.push(map.levelMap[i*map.width + j]);
+      for (let j = 0; j < map.width; j++) {
+        temp.push(map.levelMap[i * map.width + j]);
       }
       frontLevelMap.push(temp);
     }
@@ -74,17 +75,18 @@ export class DbController implements AppRoute {
       userRating: frontMap.userRating,
       numOfUserGrades: frontMap.numOfUserGrades,
       numOfComplicityGrades: frontMap.numOfComplicityGrades,
+      debugTask: frontMap.debugTask,
       levelMap: []
-  });
+    });
 
-  frontMap.levelMap.flat(Infinity).forEach((element: { type: any; portalCoordinate: any; }) => {
-    map.levelMap.push({
-      type: element.type,
-      portalCoordinate: element.portalCoordinate
-    })
-  });
+    frontMap.levelMap.flat(Infinity).forEach((element: { type: any; portalCoordinate: any; }) => {
+      map.levelMap.push({
+        type: element.type,
+        portalCoordinate: element.portalCoordinate
+      })
+    });
 
-  return map;
+    return map;
   }
 
   constructor() {
@@ -96,7 +98,8 @@ export class DbController implements AppRoute {
         request.body.userRating = 5;
         request.body.numOfUserGrades = 1;
         request.body.numOfComplicityGrades = 1;
-        
+        request.body.debugTask = request.body.debugTask ?? false;
+
         const checkMap = await MapModel.findOne({ title: request.body.title });
 
         if (checkMap)
@@ -148,7 +151,7 @@ export class DbController implements AppRoute {
       try {
         const map = (await MapModel.findOne({ title: request.params.title }));
         if (map == null) {
-          return response.status(404).json({msg: "Map not found"});
+          return response.status(404).json({ msg: "Map not found" });
         }
 
         return response.status(200).json(this.convertMapToFrontendMap(map));
