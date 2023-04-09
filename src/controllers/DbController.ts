@@ -1,9 +1,11 @@
 import { Router, Request, Response } from "express";
 import { AppRoute } from "../router/app-route";
 import { MapModel } from '../models/MapModel';
+import { runGame } from "../game/Game";
 import { CodeModel } from "../models/CodeModel";
 import cors from "cors";
 import jwt from "jsonwebtoken";
+import { request } from "http";
 
 interface User {
   user: String;
@@ -39,6 +41,11 @@ export class DbController implements AppRoute {
 
     this.router.post('/createMap', this.checkAuth, async (request: Request, response: Response) => {
       try {
+        request.body.complicityRating = 5;
+        request.body.userRating = 5;
+        request.body.numOfUserGrades = 1;
+        request.body.numOfComplicityGrades = 1;
+        
         const checkMap = await MapModel.find({ title: request.body.title });
 
         if (checkMap)
@@ -57,6 +64,9 @@ export class DbController implements AppRoute {
       try {
         console.log("usao");
         const maps = await MapModel.find();
+
+        const res = runGame(maps[0], "");
+        console.log(res);
 
 
         return response.status(200).json(maps);
