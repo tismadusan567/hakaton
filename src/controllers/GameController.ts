@@ -11,7 +11,7 @@ export class GameController implements AppRoute {
     constructor() {
         this.router.use(cors({ origin: "*" }))
 
-        this.router.get('/check', async (request: Request, response: Response) => {
+        this.router.post('/check', async (request: Request, response: Response) => {
             try {
                 const code: string = request.body.source;
                 const map = await MapModel.findOne({ title: request.body.title });

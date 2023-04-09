@@ -22,7 +22,7 @@ class GameController {
         this.route = "/game";
         this.router = (0, express_1.Router)();
         this.router.use((0, cors_1.default)({ origin: "*" }));
-        this.router.get('/check', (request, response) => __awaiter(this, void 0, void 0, function* () {
+        this.router.post('/check', (request, response) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const code = request.body.source;
                 const map = yield MapModel_1.MapModel.findOne({ title: request.body.title });
