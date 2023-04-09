@@ -79,15 +79,15 @@ export class DbController implements AppRoute {
       levelMap: []
     });
 
-  frontMap.levelMap.flat(Infinity).forEach((element: {
-    img: any; type: any; portalCoordinate: any; 
-}) => {
-    map.levelMap.push({
-      type: element.type ?? 0,
-      portalCoordinate: element.portalCoordinate,
-      img: element.img
-    })
-  });
+    frontMap.levelMap.flat(Infinity).forEach((element: {
+      img: any; type: any; portalCoordinate: any;
+    }) => {
+      map.levelMap.push({
+        type: element.type ?? 0,
+        portalCoordinate: element.portalCoordinate,
+        img: element.img
+      })
+    });
 
     return map;
   }
@@ -186,9 +186,19 @@ export class DbController implements AppRoute {
 
     this.router.get('/getCode/:mapTitle', async (request: Request, response: Response) => {
       try {
-        const code = await CodeModel.find({ mapTitle: request.params.mapTitle });
+        const map = await MapModel.findOne({ mapTitle: request.params.mapTitle });
 
-        const randomCode = code[Math.floor(Math.random() * code.length)];
+        if (map == null)
+          return response.status(404).json({ error: "Map not found" });
+
+        let randomCode;
+
+        if (map.debugTask) {
+          let code = await CodeModel.find({ mapTitle: request.params.mapTitle });
+          randomCode = code[Math.floor(Math.random() * code.length)];
+        } else {
+          randomCode = "const solve () => {\n\n};";
+        }
 
         return response.status(200).json(randomCode);
       } catch (e) {
