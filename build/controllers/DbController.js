@@ -71,9 +71,11 @@ class DbController {
             levelMap: []
         });
         frontMap.levelMap.flat(Infinity).forEach((element) => {
+            var _a;
             map.levelMap.push({
-                type: element.type,
-                portalCoordinate: element.portalCoordinate
+                type: (_a = element.type) !== null && _a !== void 0 ? _a : 0,
+                portalCoordinate: element.portalCoordinate,
+                img: element.img
             });
         });
         return map;
@@ -88,11 +90,7 @@ class DbController {
                 request.body.userRating = 5;
                 request.body.numOfUserGrades = 1;
                 request.body.numOfComplicityGrades = 1;
-<<<<<<< HEAD
                 const checkMap = yield MapModel_1.MapModel.findOne({ title: request.body.title });
-=======
-                const checkMap = yield MapModel_1.MapModel.find({ title: request.body.title });
->>>>>>> e151f037f29e163bdeed42c7ef21d77299d6f777
                 if (checkMap)
                     return response.status(400).json({ msg: "Map with that title already exists" });
                 const newMap = this.convertFrontendMaptoMap(request.body);
@@ -123,7 +121,10 @@ class DbController {
         }));
         this.router.get('/getMaps/:creatorName', this.checkAuth, (request, response) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const maps = yield MapModel_1.MapModel.find({ creatorUsername: request.params.creatorName });
+                const maps = (yield MapModel_1.MapModel.find({ creatorUsername: request.params.creatorName })).map(el => {
+                    console.log(this.convertMapToFrontendMap(el));
+                    return this.convertMapToFrontendMap(el);
+                });
                 return response.status(200).json(maps);
             }
             catch (e) {
@@ -132,9 +133,11 @@ class DbController {
         }));
         this.router.get('/getMap/:title', (request, response) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const map = yield MapModel_1.MapModel.findOne({ title: request.params.title });
-                console.log(map);
-                return response.status(200).json(map);
+                const map = (yield MapModel_1.MapModel.findOne({ title: request.params.title }));
+                if (map == null) {
+                    return response.status(404).json({ msg: "Map not found" });
+                }
+                return response.status(200).json(this.convertMapToFrontendMap(map));
             }
             catch (e) {
                 return response.status(500).send(e);

@@ -22,6 +22,6 @@ exports.MapSchema = new mongoose_1.Schema({
     numOfUserGrades: Number,
     numOfComplicityGrades: Number,
     creatorUsername: String,
-    levelMap: [new mongoose_1.Schema({ type: Number, portalCoordinate: Number })]
+    levelMap: [new mongoose_1.Schema({ type: Number, portalCoordinate: Number, img: String })]
 });
 exports.MapModel = (0, mongoose_1.model)("Map", exports.MapSchema);
