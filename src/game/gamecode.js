@@ -74,12 +74,49 @@ const MoveToNode = (src, dest) => {
         });
         currPos = coordsToPos(newCoords.x, newCoords.y);
     }
-
-    console.log(newCoords);
-    console.log(currPos);
-    console.log('----------------------');
-
 };
+
+const Width = () => {
+    return width;
+}
+
+const Height = () => {
+    return height;
+}
+
+const PlayerPosition = () => {
+    return posToCoords(currPos);
+}
+
+const QueryMapPosition = (x, y) => {
+    if (x < 0 || x > height - 1 || y < 0 || y > width - 1) {
+        return null;
+    }
+    let nodeType = ""
+    const node = levelMap[coordsToPos(x, y)];
+    switch (node['type']) {
+        case empty: 
+            nodeType = "empty";
+            break;
+        case obstacle:
+            nodeType = "obstacle";
+            break;
+        case player:
+            nodeType = "player";
+            break;
+        case portal:
+            nodeType = "portal";
+            break;
+        case finish:
+            nodeType = "finish";
+            break;
+    }
+
+    return {
+        nodeType: nodeType,
+        portalCoordinate: posToCoords(node['portalCoordinate'])
+    }
+}
 
 const MoveLeft = () => {
     const pos = posToCoords(currPos);

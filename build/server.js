@@ -72,47 +72,6 @@ class Server {
         new app_routing_1.AppRouting(this.router);
     }
     insertDummies() {
-<<<<<<< HEAD
-        const map = new MapModel_1.MapModel({
-            title: 'map1',
-            description: 'Easy first level for dummies',
-            width: 3,
-            height: 3,
-            complicityRating: 4,
-            userRating: 3,
-            creatorUsername: "dusan",
-            levelMap: []
-        });
-        map.levelMap.push({
-            type: 2,
-            portalCoordinate: 3,
-        }, {
-            type: 3,
-            portalCoordinate: 7,
-        }, {
-            type: 0,
-            portalCoordinate: 3,
-        }, {
-            type: 0,
-            portalCoordinate: 3,
-        }, {
-            type: 0,
-            portalCoordinate: 3,
-        }, {
-            type: 0,
-            portalCoordinate: 3,
-        }, {
-            type: 0,
-            portalCoordinate: 3,
-        }, {
-            type: 3,
-            portalCoordinate: 1,
-        }, {
-            type: 4,
-            portalCoordinate: 3,
-        });
-        map.save();
-=======
         // const map = new MapModel({
         //     title: "Tenth level",
         //     description: "Easy first level for dummies",
@@ -133,7 +92,6 @@ class Server {
         //         portalCoordinate: 2
         //     },);
         // map.save();
->>>>>>> b81d230e4dd49acc51c3fcdcad984ca7295691fe
         const code = new CodeModel_1.CodeModel({
             title: "Python problem 5",
             problemDescription: "Find python error",
