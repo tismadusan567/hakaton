@@ -88,10 +88,14 @@ class DbController {
                 request.body.userRating = 5;
                 request.body.numOfUserGrades = 1;
                 request.body.numOfComplicityGrades = 1;
+<<<<<<< HEAD
                 const checkMap = yield MapModel_1.MapModel.findOne({ title: request.body.title });
+=======
+                const checkMap = yield MapModel_1.MapModel.find({ title: request.body.title });
+>>>>>>> e151f037f29e163bdeed42c7ef21d77299d6f777
                 if (checkMap)
                     return response.status(400).json({ msg: "Map with that title already exists" });
-                const newMap = new MapModel_1.MapModel(request.body);
+                const newMap = this.convertFrontendMaptoMap(request.body);
                 newMap.save();
                 return response.sendStatus(200);
             }
@@ -102,11 +106,14 @@ class DbController {
         this.router.get('/getMaps', (request, response) => __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log("usao");
-                const maps = yield MapModel_1.MapModel.find();
-                const map = maps[maps.length - 1];
-                console.log(map);
-                console.log(JSON.stringify(this.convertMapToFrontendMap(map)));
-                console.log(this.convertFrontendMaptoMap(this.convertMapToFrontendMap(map)));
+                const maps = (yield MapModel_1.MapModel.find()).map(el => {
+                    console.log(this.convertMapToFrontendMap(el));
+                    return this.convertMapToFrontendMap(el);
+                });
+                // const map = maps[maps.length - 1];
+                // console.log(map)
+                // console.log(JSON.stringify(this.convertMapToFrontendMap(map)));
+                // console.log(this.convertFrontendMaptoMap(this.convertMapToFrontendMap(map)));
                 return response.status(200).json(maps);
             }
             catch (e) {

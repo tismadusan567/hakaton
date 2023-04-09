@@ -102,7 +102,7 @@ export class DbController implements AppRoute {
         if (checkMap)
           return response.status(400).json({ msg: "Map with that title already exists" });
 
-        const newMap = new MapModel(request.body);
+        const newMap = this.convertFrontendMaptoMap(request.body);
         newMap.save();
 
         return response.sendStatus(200);
@@ -114,12 +114,15 @@ export class DbController implements AppRoute {
     this.router.get('/getMaps', async (request: Request, response: Response) => {
       try {
         console.log("usao");
-        const maps = await MapModel.find();
+        const maps = (await MapModel.find()).map(el => {
+          console.log(this.convertMapToFrontendMap(el));
+          return this.convertMapToFrontendMap(el);
+        });
 
-        const map = maps[maps.length - 1];
-        console.log(map)
-        console.log(JSON.stringify(this.convertMapToFrontendMap(map)));
-        console.log(this.convertFrontendMaptoMap(this.convertMapToFrontendMap(map)));
+        // const map = maps[maps.length - 1];
+        // console.log(map)
+        // console.log(JSON.stringify(this.convertMapToFrontendMap(map)));
+        // console.log(this.convertFrontendMaptoMap(this.convertMapToFrontendMap(map)));
 
         return response.status(200).json(maps);
       } catch (e) {
@@ -130,7 +133,10 @@ export class DbController implements AppRoute {
 
     this.router.get('/getMaps/:creatorName', this.checkAuth, async (request: Request, response: Response) => {
       try {
-        const maps = await MapModel.find({ creatorUsername: request.params.creatorName });
+        const maps = (await MapModel.find({ creatorUsername: request.params.creatorName })).map(el => {
+          console.log(this.convertMapToFrontendMap(el));
+          return this.convertMapToFrontendMap(el);
+        });
 
         return response.status(200).json(maps);
       } catch (e) {
@@ -140,11 +146,12 @@ export class DbController implements AppRoute {
 
     this.router.get('/getMap/:title', async (request: Request, response: Response) => {
       try {
-        const map = await MapModel.findOne({ title: request.params.title });
+        const map = (await MapModel.findOne({ title: request.params.title }));
+        if (map == null) {
+          return response.status(404).json({msg: "Map not found"});
+        }
 
-        console.log(map);
-
-        return response.status(200).json(map);
+        return response.status(200).json(this.convertMapToFrontendMap(map));
       } catch (e) {
         return response.status(500).send(e);
       }
