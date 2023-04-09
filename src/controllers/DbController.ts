@@ -79,7 +79,7 @@ export class DbController implements AppRoute {
 
   frontMap.levelMap.flat(Infinity).forEach((element: { type: any; portalCoordinate: any; }) => {
     map.levelMap.push({
-      type: element.type,
+      type: element.type ?? 0,
       portalCoordinate: element.portalCoordinate
     })
   });
