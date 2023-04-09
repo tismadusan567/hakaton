@@ -168,11 +168,7 @@ class DbController {
         }));
         this.router.get('/getCode/:mapTitle', (request, response) => __awaiter(this, void 0, void 0, function* () {
             try {
-<<<<<<< HEAD
-                const map = yield MapModel_1.MapModel.findOne({ mapTitle: request.params.mapTitle });
-=======
                 const map = yield MapModel_1.MapModel.findOne({ title: request.params.mapTitle });
->>>>>>> 1d9674baa588784baf47410489b6e740fad886ef
                 if (map == null)
                     return response.status(404).json({ error: "Map not found" });
                 let randomCode;
@@ -181,7 +177,7 @@ class DbController {
                     randomCode = code[Math.floor(Math.random() * code.length)];
                 }
                 else {
-                    randomCode = "const solve () => {\n\n};";
+                    randomCode = "const solve = () => {\n\n};";
                 }
                 return response.status(200).json(randomCode);
             }
