@@ -97,7 +97,7 @@ export class DbController implements AppRoute {
         request.body.numOfUserGrades = 1;
         request.body.numOfComplicityGrades = 1;
         
-        const checkMap = await MapModel.find({ title: request.body.title });
+        const checkMap = await MapModel.findOne({ title: request.body.title });
 
         if (checkMap)
           return response.status(400).json({ msg: "Map with that title already exists" });

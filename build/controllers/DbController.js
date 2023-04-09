@@ -84,7 +84,11 @@ class DbController {
         this.router.use((0, cors_1.default)({ origin: "*" }));
         this.router.post('/createMap', this.checkAuth, (request, response) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const checkMap = yield MapModel_1.MapModel.find({ title: request.body.title });
+                request.body.complicityRating = 5;
+                request.body.userRating = 5;
+                request.body.numOfUserGrades = 1;
+                request.body.numOfComplicityGrades = 1;
+                const checkMap = yield MapModel_1.MapModel.findOne({ title: request.body.title });
                 if (checkMap)
                     return response.status(400).json({ msg: "Map with that title already exists" });
                 const newMap = new MapModel_1.MapModel(request.body);
