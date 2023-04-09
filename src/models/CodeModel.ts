@@ -7,7 +7,7 @@ export interface ICode {
     complicity: number;
     userRating: number;
     creatorUsername: string;
-    mapTitle: string;
+    mapTitle:string;
     hints: IHint[];
 }
 

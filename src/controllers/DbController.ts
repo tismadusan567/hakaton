@@ -101,7 +101,7 @@ export class DbController implements AppRoute {
         request.body.userRating = 5;
         request.body.numOfUserGrades = 1;
         request.body.numOfComplicityGrades = 1;
-        request.body.debugTask = request.body.debugTask ?? false;
+        // request.body.debugTask = request.body.debugTask ?? false;
 
         const checkMap = await MapModel.findOne({ title: request.body.title });
 
