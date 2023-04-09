@@ -19,6 +19,8 @@ exports.MapSchema = new mongoose_1.Schema({
     height: Number,
     complicityRating: Number,
     userRating: Number,
+    numOfUserGrades: Number,
+    numOfComplicityGrades: Number,
     creatorUsername: String,
     levelMap: [new mongoose_1.Schema({ type: Number, portalCoordinate: Number })]
 });

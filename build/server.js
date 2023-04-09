@@ -72,29 +72,34 @@ class Server {
         new app_routing_1.AppRouting(this.router);
     }
     insertDummies() {
-        const map = new MapModel_1.MapModel({
-            title: "Cool first level",
-            description: "Easy first level for dummies",
-            width: 10,
-            height: 10,
-            complicityRating: 4,
-            userRating: 3,
-            levelMap: []
-        });
-        map.levelMap.push({
-            type: 1,
-            portalCoordinate: 3
-        }, {
-            type: 1,
-            portalCoordinate: 2
-        });
-        map.save();
+        // const map = new MapModel({
+        //     title: "Tenth level",
+        //     description: "Easy first level for dummies",
+        //     width: 10,
+        //     height: 10,
+        //     complicityRating: 4,
+        //     userRating: 3,
+        //     numOfUserGrades: 1,
+        //     numOfComplicityGrades: 1,
+        //     levelMap: []
+        // });
+        // map.levelMap.push({
+        //     type: 1,
+        //     portalCoordinate: 3
+        // },
+        //     {
+        //         type: 1,
+        //         portalCoordinate: 2
+        //     },);
+        // map.save();
         const code = new CodeModel_1.CodeModel({
-            title: "C - Segmentation fault problem 3",
-            problemDescription: "Identify block of code which causes segmentation fault in C",
-            sourceCode: "#include <stdio.h>#include<stdlib.h> int main(){ printf(\"This is some shitty code\"); return 0;}",
+            title: "Python problem 5",
+            problemDescription: "Find python error",
+            sourceCode: "def main(): time.sleep(30)",
             complicity: 1,
             userRating: 2,
+            creatorUsername: "tisma",
+            mapTitle: "Cool first level",
             hints: []
         });
         code.hints.push({
